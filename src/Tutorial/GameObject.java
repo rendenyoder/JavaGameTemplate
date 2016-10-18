@@ -56,5 +56,4 @@ public abstract class GameObject {
     public void setHeight(int height) {this.height = height;}
     public void setCharacterImage(BufferedImage characterImage) {this.characterImage = characterImage;}
     public void setImagePath(String imagePath) {this.imagePath = imagePath;}
-
 }

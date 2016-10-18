@@ -1,8 +1,9 @@
 package Tutorial;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-
+import java.awt.image.BufferedImage;
 
 public class Game extends Canvas implements Runnable{
     private static final long serialVersionUID = 2342345324532452342L;
@@ -11,9 +12,12 @@ public class Game extends Canvas implements Runnable{
     //Booling value to check whether game is running
     private boolean running = false;
     //Final values for screen size
-    public static final int WIDTH = 640, HEIGHT = WIDTH / 12 * 9;
+    public static final int WIDTH = 640, HEIGHT = (WIDTH/16) * 10;
+    public static Window window;
     //Create handler for game
     private Handler handler;
+    //Background Image
+    protected BufferedImage background;
 
     //Main function to run the game
     public static void main(String[] args){
@@ -24,11 +28,10 @@ public class Game extends Canvas implements Runnable{
     public Game(){
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
-        new Window(WIDTH, HEIGHT, "Build Game", this);
+        window = new Window(WIDTH, HEIGHT, "Build Game", this);
+        setBackground("/terminalBackground.png");
 
-        //
-        //Add player here
-        //
+        handler.addObject(new Player(WIDTH/2, HEIGHT/2,"", 50, 50, ID.Player));
     }
 
     //Start threads at same time
@@ -51,8 +54,9 @@ public class Game extends Canvas implements Runnable{
 
     //Game loop
     public void run() {
+        this.requestFocus();
         long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
+        double amountOfTicks = 120.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         long timer = System.currentTimeMillis();
@@ -95,9 +99,11 @@ public class Game extends Canvas implements Runnable{
         //New graphics object
         Graphics graphics = bufferStrategy.getDrawGraphics();
 
-        //Set background
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(0,0,WIDTH,HEIGHT);
+        //Draw background image
+        graphics.drawImage(background, 0, 0, window.getWindowWidth(), window.getWindowHeight(), null);
+
+        //Maintain window ratio
+        window.sustainWindowRatio(WIDTH, HEIGHT);
 
         //Redraw frame
         handler.render(graphics);
@@ -106,4 +112,13 @@ public class Game extends Canvas implements Runnable{
         graphics.dispose();
         bufferStrategy.show();
     }
+
+    //Set background image
+    public void setBackground(String backgroundPath){
+        //Try to set background
+        try{
+            this.background = ImageIO.read(getClass().getResourceAsStream(backgroundPath));
+        } catch(Exception e){}
+    }
+
 }

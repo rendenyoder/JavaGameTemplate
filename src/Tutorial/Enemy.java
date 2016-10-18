@@ -1,7 +1,6 @@
 package Tutorial;
 
 import java.awt.*;
-import java.util.*;
 
 public class Enemy extends GameObject{
 
@@ -17,5 +16,7 @@ public class Enemy extends GameObject{
     }
 
     //Render player graphics
-    public void render(Graphics graphics) {graphics.drawImage(characterImage, x, y, width, height, null);}
+    public void render(Graphics graphics) {
+        graphics.drawImage(characterImage, x, y, width, height, null);
+    }
 }
